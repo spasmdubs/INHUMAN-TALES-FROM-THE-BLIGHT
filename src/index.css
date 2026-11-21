@@ -1,0 +1,393 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-pixel: "Press Start 2P", monospace;
+    --font-display: "Chakra Petch", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #100d0b;
+    color: #f4efe6;
+    font-family: var(--font-display);
+  }
+}
+
+.font-pixel {
+  font-family: var(--font-pixel);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.arcade-text-stroke {
+  text-shadow:
+    0 2px 0 #100d0b,
+    2px 0 0 #100d0b,
+    -2px 0 0 #100d0b,
+    0 -2px 0 #100d0b,
+    2px 2px 0 #100d0b;
+}
+
+.scanline-overlay {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.14) 3px,
+    rgba(0, 0, 0, 0.14) 4px
+  );
+}
+
+.crt-scanlines-overlay {
+  --crt-line-pitch: 4px;
+  --crt-clear-px: 2px;
+  --crt-line-alpha: 0.36;
+  --crt-vignette-alpha: 0.42;
+  --crt-vignette-start: 71%;
+  --crt-phosphor-alpha: 0.028;
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 240, 210, var(--crt-phosphor-alpha)) 0px,
+      rgba(0, 0, 0, 0) var(--crt-clear-px),
+      rgba(3, 5, 14, var(--crt-line-alpha)) var(--crt-clear-px),
+      rgba(3, 5, 14, var(--crt-line-alpha)) var(--crt-line-pitch)
+    ),
+    radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0) var(--crt-vignette-start),
+      rgba(4, 5, 14, var(--crt-vignette-alpha)) 100%
+    );
+}
+
+.lcd-matrix-overlay {
+  --lcd-cell-size: 5px;
+  --lcd-r-end: 1.3px;
+  --lcd-g-end: 2.6px;
+  --lcd-b-end: 3.9px;
+  --lcd-row-clear: 3.8px;
+  --lcd-grid-alpha: 0.36;
+  --lcd-subpixel-alpha: 0.108;
+  --lcd-tint-alpha: 0.027;
+  background-color: rgba(145, 180, 92, var(--lcd-tint-alpha));
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 58, 86, var(--lcd-subpixel-alpha)) 0px,
+      rgba(255, 58, 86, var(--lcd-subpixel-alpha)) var(--lcd-r-end),
+      rgba(64, 255, 142, var(--lcd-subpixel-alpha)) var(--lcd-r-end),
+      rgba(64, 255, 142, var(--lcd-subpixel-alpha)) var(--lcd-g-end),
+      rgba(64, 152, 255, var(--lcd-subpixel-alpha)) var(--lcd-g-end),
+      rgba(64, 152, 255, var(--lcd-subpixel-alpha)) var(--lcd-b-end),
+      rgba(4, 6, 8, var(--lcd-grid-alpha)) var(--lcd-b-end),
+      rgba(4, 6, 8, var(--lcd-grid-alpha)) var(--lcd-cell-size)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.04) 0px,
+      rgba(255, 255, 255, 0.04) var(--lcd-row-clear),
+      rgba(4, 6, 8, var(--lcd-grid-alpha)) var(--lcd-row-clear),
+      rgba(4, 6, 8, var(--lcd-grid-alpha)) var(--lcd-cell-size)
+    );
+}
+
+/* Analog VHS Tape Effect Overlay (tracking sweep, chroma bleed, noise grain, head-switching curl) */
+.vhs-tape-overlay {
+  --vhs-tracking-alpha: 0.35;
+  --vhs-head-switch-alpha: 0.4;
+  --vhs-noise-alpha: 0.14;
+  --vhs-chroma-alpha: 0.13;
+  --vhs-chroma-offset: 3.5px;
+  --vhs-jitter-px: 0.9px;
+  --vhs-tracking-duration: 6s;
+  overflow: hidden;
+}
+
+.vhs-chroma-layer {
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    inset var(--vhs-chroma-offset) 0 18px rgba(255, 42, 92, var(--vhs-chroma-alpha)),
+    inset calc(var(--vhs-chroma-offset) * -1) 0 18px rgba(40, 224, 255, var(--vhs-chroma-alpha));
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 72, 112, calc(var(--vhs-chroma-alpha) * 0.24)) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(48, 224, 255, calc(var(--vhs-chroma-alpha) * 0.24)) 4px,
+    rgba(0, 0, 0, 0) 6px
+  );
+  will-change: transform;
+  animation: vhsJitter 260ms steps(2, end) infinite;
+}
+
+.vhs-noise-layer {
+  position: absolute;
+  inset: -12px;
+  opacity: var(--vhs-noise-alpha);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.32) 0px,
+      rgba(0, 0, 0, 0.24) 2px,
+      rgba(215, 240, 255, 0.18) 3px,
+      rgba(0, 0, 0, 0) 5px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.24) 0px,
+      rgba(0, 0, 0, 0.28) 1px,
+      rgba(255, 255, 255, 0.12) 2px,
+      rgba(0, 0, 0, 0) 4px
+    );
+  background-size:
+    11px 7px,
+    7px 5px;
+  will-change: transform;
+  animation: vhsNoiseStep 110ms steps(4, end) infinite;
+}
+
+.vhs-tracking-bar {
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  top: 0;
+  height: 34px;
+  opacity: var(--vhs-tracking-alpha);
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(240, 248, 255, 0.26) 24%,
+      rgba(255, 64, 120, 0.24) 44%,
+      rgba(48, 220, 255, 0.28) 62%,
+      rgba(255, 255, 255, 0.18) 80%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.45) 0px,
+      rgba(0, 0, 0, 0.2) 3px,
+      rgba(255, 255, 255, 0.15) 6px,
+      rgba(0, 0, 0, 0) 11px
+    );
+  will-change: transform;
+  animation: vhsTrackingSweep var(--vhs-tracking-duration) linear infinite;
+}
+
+.vhs-head-switch {
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  bottom: 0;
+  height: 11px;
+  opacity: var(--vhs-head-switch-alpha);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.55) 0px,
+    rgba(48, 224, 255, 0.45) 4px,
+    rgba(10, 10, 14, 0.85) 8px,
+    rgba(255, 60, 108, 0.45) 14px,
+    rgba(10, 10, 14, 0.8) 20px
+  );
+  will-change: transform;
+  animation: vhsJitter 150ms steps(3, end) infinite;
+}
+
+@keyframes vhsTrackingSweep {
+  0% {
+    transform: translate3d(0, -14vh, 0);
+  }
+  100% {
+    transform: translate3d(0, 114vh, 0);
+  }
+}
+
+@keyframes vhsJitter {
+  0% {
+    transform: translate3d(calc(var(--vhs-jitter-px) * -1), 0, 0);
+  }
+  50% {
+    transform: translate3d(var(--vhs-jitter-px), 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes vhsNoiseStep {
+  0% {
+    transform: translate3d(0px, 0px, 0);
+  }
+  25% {
+    transform: translate3d(-4px, 3px, 0);
+  }
+  50% {
+    transform: translate3d(3px, -2px, 0);
+  }
+  75% {
+    transform: translate3d(-2px, -4px, 0);
+  }
+  100% {
+    transform: translate3d(2px, 2px, 0);
+  }
+}
+
+.no-long-press {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+/* Crisp retro scrollbar for forge and archive drawers */
+.retro-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.retro-scroll::-webkit-scrollbar-track {
+  background: #171311;
+}
+
+.retro-scroll::-webkit-scrollbar-thumb {
+  background: #4a3e35;
+  border: 2px solid #171311;
+}
+
+.retro-scroll::-webkit-scrollbar-thumb:hover {
+  background: #d97706;
+}
+
+@keyframes levelUpPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -12px) scale(0.82);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(-50%, 0px) scale(1.06);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, 0px) scale(1);
+  }
+  84% {
+    opacity: 1;
+    transform: translate(-50%, -2px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -14px) scale(0.96);
+  }
+}
+
+.animate-level-up {
+  box-shadow: 0 0 22px rgba(250, 204, 21, 0.55), 0 8px 0 rgba(8, 6, 5, 0.85);
+  will-change: transform, opacity;
+  animation: levelUpPop 2.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes comboHitPop {
+  0% {
+    transform: scale(1.26);
+  }
+  45% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-combo-pop {
+  will-change: transform;
+  animation: comboHitPop 190ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes comboRankBurst {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.84);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0px) scale(1.06);
+  }
+  78% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
+  }
+}
+
+.animate-combo-rankup {
+  will-change: transform, opacity;
+  animation: comboRankBurst 1.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes bossHitPulse {
+  0% {
+    opacity: 0.95;
+    transform: scale(1.012);
+  }
+  45% {
+    opacity: 0.55;
+    transform: scale(1.004);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.animate-boss-hit {
+  will-change: transform, opacity;
+  animation: bossHitPulse 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes comboHeatPulse {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-combo-heat {
+  will-change: opacity;
+  animation: comboHeatPulse 900ms ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

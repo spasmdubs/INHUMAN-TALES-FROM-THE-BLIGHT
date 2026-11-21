@@ -1,0 +1,8 @@
+{
+  "name": "Voidbreaker '87",
+  "description": "Retro 80's pixelated isometric dark-fantasy sci-fi beat 'em up with full character customization, 1K/2K/4K portrait generation, and dimensional oracle chat.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
